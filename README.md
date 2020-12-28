@@ -1,5 +1,13 @@
-# my-exams-api
+# My Exams API
 
+## How to use
+### Running
 ```bash
-pip install -r requirements.txt --use-feature=2020-resolver
+docker-compose up --build
+```
+
+### DB Migration
+```bash
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
 ```
