@@ -3,8 +3,16 @@ version: '3.7'
 services:
   web:
     build: .
+    env_file:
+      - .env
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/code
+      - .:/app
     ports:
       - 8000:8000
+    depends_on:
+      - db
+  db:
+    env_file:
+      - .env
+    image: postgres:11
