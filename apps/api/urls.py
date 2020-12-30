@@ -1,7 +1,7 @@
 from django.urls import path
 
-# from .views import BookAPIView
+from .views import ListExams
 
 urlpatterns = [
-    # path('', BookAPIView.as_view()),
+    path('', ListExams.as_view()),
 ]

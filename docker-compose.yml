@@ -13,6 +13,12 @@ services:
     depends_on:
       - db
   db:
+    build: ./database
+    container_name: myexams-database
     env_file:
       - .env
-    image: postgres:11
+    volumes:
+      # /host/path:/container/path
+      - ./database/data:/var/lib/postgresql/data
+volumes:
+  database:

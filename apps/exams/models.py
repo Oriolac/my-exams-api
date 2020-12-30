@@ -4,16 +4,16 @@ from django.db import models
 
 # Create your models here.
 class Student(models.Model):
-    studentID = models.CharField(unique=True, editable=False)
+    studentID = models.CharField(unique=True, editable=False, max_length=25)
 
     def __str__(self):
         return f"{self.studentID}"
 
 
 class ExamLocation(models.Model):
-    port = models.IntegerField(editable=False)
-    host = models.CharField(editable=False, default="127.0.0.1")
-    bind_key = models.CharField(editable=False)
+    port = models.IntegerField()
+    host = models.CharField(default="127.0.0.1", max_length=25)
+    bind_key = models.CharField(max_length=25)
 
     def __str__(self):
         return f"{self.host}:{self.port}/{self.bind_key}"
@@ -29,18 +29,19 @@ class Choice(models.Model):
 
 class Question(models.Model):
     title = models.CharField(max_length=40)
-    choices = models.ManyToManyField(Choice)
-    correct_choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    choices = models.ManyToManyField(Choice, related_name='choices')
+    correct_choice = models.IntegerField()
 
     def __str__(self):
-        choices_str = '\n'.join(map(lambda x: f'\t{x}', map(str, self.choices)))
+        choices_str = '\n'.join(map(lambda x: f'\t{x}', map(str, self.choices.all())))
         return f"{self.title}\n{choices_str}"
 
-    def save(self, **kwargs):
-        if self.correct_choice in self.choices:
+
+"""    def save(self, **kwargs):
+        if self.choices.get(choice_id=self.correct_choice) is not None:
             super(Question, self).save(**kwargs)
         else:
-            raise ValidationError("Correct choice not in Choices")
+            raise ValidationError("Correct choice not in Choices")"""
 
 
 class Exam(models.Model):
@@ -49,17 +50,17 @@ class Exam(models.Model):
     date_start = models.DateTimeField()
     date_finish = models.DateTimeField()
     location = models.ForeignKey(ExamLocation, on_delete=models.DO_NOTHING)
-    questions = models.ManyToManyField(Question, on_delete=models.CASCADE)
+    questions = models.ManyToManyField(Question)
     students = models.ManyToManyField(Student, through='Grade')
 
     def __str__(self):
         return f"{self.id} - {self.title}"
 
-    def save(self, **kwargs):
+"""    def save(self, **kwargs):
         if self.date_start < self.date_finish:
             super(Exam, self).save(**kwargs)
         else:
-            raise ValidationError("Correct choice not in Choices")
+            raise ValidationError("Correct choice not in Choices")"""
 
 
 class Grade(models.Model):
