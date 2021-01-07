@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.exams.models import Exam, ExamLocation, Question, Choice
+from apps.exams.models import Exam, ExamLocation, Question, Choice, Student
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -38,23 +38,34 @@ class QuestionSerializer(serializers.ModelSerializer):
         return instance
 
 
+class StudentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = '__all__'
+
 class CompleteExamSerializer(serializers.ModelSerializer):
     location = LocationSerializer(read_only=False, many=False)
     questions = QuestionSerializer(read_only=False, many=True)
+    students = QuestionSerializer(read_only=False, many=True)
 
     class Meta:
         model = Exam
-        fields = ('id', 'title', 'description', 'date_start', 'date_finish', 'location', 'questions')
+        fields = ('id', 'title', 'description', 'date_start', 'date_finish', 'location', 'questions', 'students')
 
     def create(self, validated_data):
         questions = []
         for question in validated_data.pop('questions'):
             questions.append(create_question_depth(question))
+        students = []
+        for student in validated_data.pop('students'):
+            students.append(Student.objects.create(studentID=student['studentID']))
+
         location = validated_data.pop('location')
         location_instance = ExamLocation.objects.create(**location)
         validated_data['location'] = location_instance
         instance = Exam.objects.create(**validated_data)
         instance.questions.set(questions)
+        instance.students.set(students)
         return instance
 
 
