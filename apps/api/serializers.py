@@ -86,3 +86,9 @@ class ExamGradesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Grade
         fields = ['student', 'correct']
+
+class CorrectExamGradesSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Grade
+        fields = ['correct']
