@@ -4,7 +4,7 @@ from django.db import models
 
 # Create your models here.
 class Student(models.Model):
-    studentID = models.CharField(unique=True, editable=False, max_length=25)
+    studentID = models.CharField(max_length=25)
 
     def __str__(self):
         return f"{self.studentID}"
@@ -66,7 +66,7 @@ class Exam(models.Model):
 class Grade(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
-    correct = models.IntegerField()
+    correct = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.correct} / {len(self.exam.questions)}"
+        return f"{self.correct} / {len(self.exam.questions.all())}"

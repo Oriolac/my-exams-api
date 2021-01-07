@@ -6,13 +6,13 @@ from apps.exams.models import Exam, ExamLocation, Question, Choice, Student
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExamLocation
-        fields = '__all__'
+        fields = ['port', 'host', 'bind_key']
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Choice
-        fields = '__all__'
+        fields = ['choice_id', 'response']
 
 
 def create_question_depth(validated_data):
@@ -41,7 +41,8 @@ class QuestionSerializer(serializers.ModelSerializer):
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = '__all__'
+        fields = ['studentID']
+
 
 class CompleteExamSerializer(serializers.ModelSerializer):
     location = LocationSerializer(read_only=False, many=False)
@@ -50,15 +51,21 @@ class CompleteExamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exam
-        fields = ('id', 'title', 'description', 'date_start', 'date_finish', 'location', 'questions', 'students')
+        fields = ('title', 'description', 'date_start', 'date_finish', 'location', 'questions', 'students')
 
     def create(self, validated_data):
         questions = []
         for question in validated_data.pop('questions'):
             questions.append(create_question_depth(question))
         students = []
-        for student in validated_data.pop('students'):
-            students.append(Student.objects.create(studentID=student['studentID']))
+        print(validated_data)
+        validated_data.pop('students')
+        for student in self.initial_data.pop('students'):
+            stud = Student.objects.get(studentID=student['studentID'])
+            print(stud)
+            if not stud:
+                stud = Student.objects.create(studentID=student['studentID'])
+            students.append(stud)
         location = validated_data.pop('location')
         location_instance = ExamLocation.objects.create(**location)
         validated_data['location'] = location_instance
