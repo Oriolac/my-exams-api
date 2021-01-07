@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.exams.models import Exam, ExamLocation, Question, Choice, Student
+from apps.exams.models import Exam, ExamLocation, Question, Choice, Student, Grade
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -44,6 +44,7 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ['studentID']
 
 
+
 class CompleteExamSerializer(serializers.ModelSerializer):
     location = LocationSerializer(read_only=False, many=False)
     questions = QuestionSerializer(read_only=False, many=True)
@@ -51,7 +52,7 @@ class CompleteExamSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Exam
-        fields = ('title', 'description', 'date_start', 'date_finish', 'location', 'questions', 'students')
+        fields = ('id', 'title', 'description', 'date_start', 'date_finish', 'location', 'questions', 'students')
 
     def create(self, validated_data):
         questions = []
@@ -60,8 +61,9 @@ class CompleteExamSerializer(serializers.ModelSerializer):
         students = []
         validated_data.pop('students')
         for student in self.initial_data.pop('students'):
-            stud = Student.objects.get(studentID=student['studentID'])
-            if not stud:
+            try:
+                stud = Student.objects.get(studentID=student['studentID'])
+            except:
                 stud = Student.objects.create(studentID=student['studentID'])
             students.append(stud)
         location = validated_data.pop('location')
@@ -77,3 +79,9 @@ class ExamDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = ['description']
+
+
+class ExamGradesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Grade
+        fields = ['student', 'correct']

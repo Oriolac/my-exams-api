@@ -104,16 +104,8 @@ class UpdateDescriptionExamView(generics.RetrieveUpdateAPIView):
     serializer_class = ExamDescriptionSerializer
 
 
-class ManageAccessExamAPIView2(APIView):
-
-    def get(self, request, pk, student):
-        exam = Exam.objects.get(id=pk)
-        print(student)
-        return Response(True)
-
-
-class ManageAccessExamAPIView(APIView):
-
-    def get(self, request, pk, student):
-        print(pk)
-        return Response("Okay")
+class ExamGrades(APIView):
+    def get(self, request, *args, **kwargs):
+        exam: Exam = Exam.objects.get(pk=kwargs['pk'])
+        serializer = ExamGradesSerializer(exam.grade_set, many=True)
+        return Response(serializer.data)
