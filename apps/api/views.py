@@ -1,4 +1,4 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, filters
 
 from django.http import HttpResponse
 
@@ -9,6 +9,8 @@ from apps.exams.models import Exam, ExamLocation, Student, Question
 class ExamsList(mixins.ListModelMixin,
                 mixins.CreateModelMixin,
                 generics.GenericAPIView):
+    search_fields = ['title', 'description']
+    filter_backends = (filters.SearchFilter,)
     queryset = Exam.objects.all()
     serializer_class = CompleteExamSerializer
 
@@ -20,8 +22,7 @@ class ExamsList(mixins.ListModelMixin,
 
 
 class ExamDetail(mixins.RetrieveModelMixin,
-                 mixins.UpdateModelMixin,
-                 mixins.DestroyModelMixin,
+                 mixins.DestroyModelMixin, mixins.UpdateModelMixin,
                  generics.GenericAPIView):
     queryset = Exam.objects.all()
     serializer_class = CompleteExamSerializer
@@ -29,11 +30,11 @@ class ExamDetail(mixins.RetrieveModelMixin,
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
-    def put(self, request, *args, **kwargs):
-        return self.update(request, *args, **kwargs)
-
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 
 
 class LocationList(mixins.ListModelMixin,
@@ -71,23 +72,19 @@ class QuestionList(mixins.ListModelMixin,
         return self.create(request, *args, **kwargs)
 
 
-class ChoiceList(mixins.ListModelMixin,
-                 mixins.CreateModelMixin,
-                 generics.GenericAPIView):
-    queryset = Choice.objects.all()
-    serializer_class = ChoiceSerializer
-
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        return self.create(request, *args, **kwargs)
-
-
 class QuestionDetail(mixins.RetrieveModelMixin,
+                     mixins.DestroyModelMixin,
                      generics.GenericAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class UpdateDescriptionExamView(generics.RetrieveUpdateAPIView):
+    queryset = Exam.objects.all()
+    serializer_class = ExamDescriptionSerializer
