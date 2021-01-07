@@ -88,3 +88,11 @@ class QuestionDetail(mixins.RetrieveModelMixin,
 class UpdateDescriptionExamView(generics.RetrieveUpdateAPIView):
     queryset = Exam.objects.all()
     serializer_class = ExamDescriptionSerializer
+
+
+class ExamGrades(mixins.ListModelMixin, generics.RetrieveUpdateAPIView):
+    queryset = Grade.objects.all()
+    serializer_class = ExamGradesSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)

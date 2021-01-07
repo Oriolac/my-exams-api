@@ -10,4 +10,5 @@ urlpatterns = [
     path('location/<int:pk>', LocationDetail.as_view()),
     path('question/', QuestionList.as_view()),
     path('question/<int:pk>', QuestionDetail.as_view()),
+    path('exam/<int:pk>', ExamGrades.as_view()),
 ]

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.exams.models import Exam, ExamLocation, Question, Choice, Student
+from apps.exams.models import Exam, ExamLocation, Question, Choice, Student, Grade
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -43,6 +43,7 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = '__all__'
 
+
 class CompleteExamSerializer(serializers.ModelSerializer):
     location = LocationSerializer(read_only=False, many=False)
     questions = QuestionSerializer(read_only=False, many=True)
@@ -72,3 +73,9 @@ class ExamDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Exam
         fields = ['description']
+
+
+class ExamGradesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Grade
+        fields = ('grade', 'correct')
