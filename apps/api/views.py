@@ -2,9 +2,8 @@ from rest_framework import generics, mixins
 
 from django.http import HttpResponse
 
-from apps.api.serializers import ExamSerializer, CompleteExamSerializer
-from apps.exams.models import Student
-from apps.exams.models import Exam
+from apps.api.serializers import ExamSerializer, CompleteExamSerializer, LocationSerializer, QuestionSerializer
+from apps.exams.models import Exam, ExamLocation, Student, Question
 
 
 class ExamsList(mixins.ListModelMixin,
@@ -20,7 +19,7 @@ class ExamsList(mixins.ListModelMixin,
         return self.create(request, *args, **kwargs)
 
 
-class DetailExam(mixins.RetrieveModelMixin,
+class ExamDetail(mixins.RetrieveModelMixin,
                  mixins.UpdateModelMixin,
                  mixins.DestroyModelMixin,
                  generics.GenericAPIView):
@@ -35,3 +34,47 @@ class DetailExam(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class LocationList(mixins.ListModelMixin,
+                   mixins.CreateModelMixin,
+                   generics.GenericAPIView):
+    queryset = ExamLocation.objects.all()
+    serializer_class = LocationSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class LocationDetail(mixins.RetrieveModelMixin,
+                     generics.GenericAPIView):
+    queryset = ExamLocation.objects.all()
+    serializer_class = LocationSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+class QuestionList(mixins.ListModelMixin,
+                   mixins.CreateModelMixin,
+                   generics.GenericAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class QuestionDetail(mixins.RetrieveModelMixin,
+                     generics.GenericAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
