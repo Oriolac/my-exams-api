@@ -2,7 +2,7 @@ from rest_framework import generics, mixins
 
 from django.http import HttpResponse
 
-from apps.api.serializers import ExamSerializer, CompleteExamSerializer, LocationSerializer, QuestionSerializer
+from apps.api.serializers import *
 from apps.exams.models import Exam, ExamLocation, Student, Question
 
 
@@ -63,6 +63,32 @@ class QuestionList(mixins.ListModelMixin,
                    generics.GenericAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class ChoiceList(mixins.ListModelMixin,
+                 mixins.CreateModelMixin,
+                 generics.GenericAPIView):
+    queryset = Choice.objects.all()
+    serializer_class = ChoiceSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class BasicQuestionList(mixins.ListModelMixin,
+                        mixins.CreateModelMixin,
+                        generics.GenericAPIView):
+    queryset = Question.objects.all()
+    serializer_class = BasicQuestionSerializer
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)

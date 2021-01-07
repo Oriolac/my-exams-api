@@ -8,5 +8,7 @@ urlpatterns = [
     path('location/', LocationList.as_view()),
     path('location/<int:pk>', LocationDetail.as_view()),
     path('question/', QuestionList.as_view()),
+    path('choice/', ChoiceList.as_view()),
+    path('bquestion/', BasicQuestionList.as_view()),
     path('question/<int:pk>', QuestionDetail.as_view()),
 ]
