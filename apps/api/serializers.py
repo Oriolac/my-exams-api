@@ -46,7 +46,7 @@ class StudentSerializer(serializers.ModelSerializer):
 class CompleteExamSerializer(serializers.ModelSerializer):
     location = LocationSerializer(read_only=False, many=False)
     questions = QuestionSerializer(read_only=False, many=True)
-    students = QuestionSerializer(read_only=False, many=True)
+    students = StudentSerializer(read_only=False, many=True)
 
     class Meta:
         model = Exam
@@ -59,7 +59,6 @@ class CompleteExamSerializer(serializers.ModelSerializer):
         students = []
         for student in validated_data.pop('students'):
             students.append(Student.objects.create(studentID=student['studentID']))
-
         location = validated_data.pop('location')
         location_instance = ExamLocation.objects.create(**location)
         validated_data['location'] = location_instance
