@@ -17,8 +17,6 @@ class ExamsList(mixins.ListModelMixin,
     serializer_class = CompleteExamSerializer
 
     def get(self, request, *args, **kwargs):
-        print(request.data)
-        print(kwargs)
         return self.list(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):

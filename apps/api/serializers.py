@@ -58,11 +58,9 @@ class CompleteExamSerializer(serializers.ModelSerializer):
         for question in validated_data.pop('questions'):
             questions.append(create_question_depth(question))
         students = []
-        print(validated_data)
         validated_data.pop('students')
         for student in self.initial_data.pop('students'):
             stud = Student.objects.get(studentID=student['studentID'])
-            print(stud)
             if not stud:
                 stud = Student.objects.create(studentID=student['studentID'])
             students.append(stud)
