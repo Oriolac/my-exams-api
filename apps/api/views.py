@@ -105,7 +105,29 @@ class UpdateDescriptionExamView(generics.RetrieveUpdateAPIView):
 
 
 class ExamGrades(APIView):
+
     def get(self, request, *args, **kwargs):
         exam: Exam = Exam.objects.get(pk=kwargs['pk'])
         serializer = ExamGradesSerializer(exam.grade_set, many=True)
         return Response(serializer.data)
+
+
+class PutExamGrade(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, generics.GenericAPIView):
+    queryset = Grade.objects.all()
+    serializer_class = ExamGradesSerializer
+
+    def get(self, request, *args, **kwargs):
+        exam: Exam = Exam.objects.get(pk=kwargs['pk'])
+        grade = exam.grade_set.get(student__studentID=kwargs['studentID'])
+        serializer = ExamGradesSerializer(grade)
+        return Response(serializer.data)
+
+    def put(self, request, *args, **kwargs):
+        exam: Exam = Exam.objects.get(pk=kwargs['pk'])
+        grade = exam.grade_set.get(student__studentID=kwargs['studentID'])
+        print(request.data)
+        if request.data['student.studentID'] != grade.student.studentID:
+            return Response(ExamGradesSerializer(grade).data, status=400)
+        grade.correct = request.data['correct']
+        grade.save()
+        return Response(ExamGradesSerializer(grade).data)

@@ -23,8 +23,8 @@ docker-compose exec web python manage.py createsuperuser
 - [x] List all exams information
 
 ### Advanced Functions
-- [] Upload grades to an exam
-- [] Download student's grades
+- [X] Upload grades to an exam
+- [X] Download student's grades
 - [X] Manage student's access
 - [X] Store and retrieve all of your exams' information in a database in your web services server.
 - [X] Use a Data source in order to manage data information.

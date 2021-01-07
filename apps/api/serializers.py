@@ -44,7 +44,6 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ['studentID']
 
 
-
 class CompleteExamSerializer(serializers.ModelSerializer):
     location = LocationSerializer(read_only=False, many=False)
     questions = QuestionSerializer(read_only=False, many=True)
@@ -82,6 +81,8 @@ class ExamDescriptionSerializer(serializers.ModelSerializer):
 
 
 class ExamGradesSerializer(serializers.ModelSerializer):
+    student = StudentSerializer(read_only=False, many=False)
+
     class Meta:
         model = Grade
         fields = ['student', 'correct']
