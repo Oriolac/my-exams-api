@@ -2,14 +2,23 @@
 
 ## How to use
 ### Running
+The first time, you must run the images.
 ```bash
-docker-compose up --build
+docker-compose build
+```
+```bash
+docker-compose up
 ```
 
 ### DB Migration
 ```bash
 docker-compose exec web python manage.py migrate
 docker-compose exec web python manage.py createsuperuser
+```
+
+### Testing
+```bash
+docker-compose exec web python manage.py test apps.api.tests
 ```
 
 ## Specifications
