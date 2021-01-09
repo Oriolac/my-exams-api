@@ -30,7 +30,6 @@ class GradesTestCase(TestCase):
         question = Question.objects.create(title="First question?", correct_choice=1)
         choice = Choice.objects.create(choice_id=1, response="First choice")
         student = Student.objects.create(studentID="123")
-        grade = Grade.objects.create(student=student, exam=exam, correct=1)
 
         question.choices.set([choice])
         exam.questions.set([question])
