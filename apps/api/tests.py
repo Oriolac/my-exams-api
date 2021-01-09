@@ -1,7 +1,7 @@
 from django.test import TestCase
 import json
 # Create your tests here.
-from rest_framework.test import APIClient
+from rest_framework.test import APIClient, APIRequestFactory, RequestsClient
 
 from apps.exams.models import Question, Choice, Exam, ExamLocation, Student, Grade
 
@@ -44,7 +44,7 @@ class AllInOneTestCase(TestCase):
         self.assertEquals(200, response.status_code)
         return response
 
-    def test_get_student_grades(self):
+    def test_get_student_grade(self):
         client = APIClient()
         response = client.get('/api/exam/1/grades/123/')
         self.assertEquals(200, response.status_code)
@@ -64,3 +64,38 @@ class AllInOneTestCase(TestCase):
         self.assertEquals(200, response.status_code)
         self.assertEquals('123', response.json()['student']['studentID'])
         self.assertEquals(2, response.json()['correct'])
+
+    def test_get_list_exam(self):
+        client = APIClient()
+        response = client.get('/api/exam/')
+        self.assertEquals(200, response.status_code)
+        self.assertEquals(1, len(response.json()))
+        exam = response.json()[0]
+        self.assertEquals("My first exam", exam['title'])
+        self.assertEquals("My first exam description", exam['description'])
+
+    def test_get_exam(self):
+        client = APIClient()
+        response = client.get('/api/exam/1/')
+        self.assertEquals(200, response.status_code)
+        exam = response.json()
+        self.assertEquals("My first exam", exam['title'])
+        self.assertEquals("My first exam description", exam['description'])
+
+    def test_access_student(self):
+        client = APIClient()
+        response = client.get('/api/exam/1/123/')
+        self.assertEquals(200, response.status_code)
+        location = response.json()
+        self.assertEquals(998, location['port'])
+        self.assertEquals('localhost', location['host'])
+        self.assertEquals('string1', location['bind_key'])
+
+
+
+    def test_delete_exam(self):
+        factory = APIClient()
+        response = factory.delete('/api/exam/1/')
+        self.assertEquals(204, response.status_code)
+        response = factory.get('/api/exam/')
+        self.assertEquals([], response.json())
