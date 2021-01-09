@@ -6,7 +6,7 @@ from rest_framework.test import APIClient
 from apps.exams.models import Question, Choice, Exam, ExamLocation, Student, Grade
 
 
-class QuestionTestCase(TestCase):
+"""class QuestionTestCase(TestCase):
 
     def setUp(self) -> None:
         instance = Question.objects.create(title="How works?", correct_choice=1)
@@ -17,7 +17,7 @@ class QuestionTestCase(TestCase):
         client = APIClient()
         response = client.get('/api/question/1/')
         self.assertEquals(200, response.status_code)
-        print(response.json())
+        print(response.json())"""
 
 
 class GradesTestCase(TestCase):
@@ -36,13 +36,14 @@ class GradesTestCase(TestCase):
         exam.students.set([student])
 
 
-    def test_put_grades(self):
+    """def test_put_grades(self):
         client = APIClient()
         data = {'correct': 1}
         response = client.put('/api/exam/1/grades/123/', data)
+        self.assertEquals(200, response.status_code)"""
 
-    """def test_get_grades(self):
+    def test_get_grades(self):
         client = APIClient()
-        response = client.get('/api/exam/1/grades/')
+        response = client.get('/api/exam/1/grades/123/')
         self.assertEquals(200, response.status_code)
-        print(response.json())"""
+        print(response.json())
