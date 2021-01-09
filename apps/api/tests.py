@@ -64,3 +64,35 @@ class AllInOneTestCase(TestCase):
         self.assertEquals(200, response.status_code)
         self.assertEquals('123', response.json()['student']['studentID'])
         self.assertEquals(2, response.json()['correct'])
+
+    def test_put_exam_description(self):
+        client = APIClient()
+        data = {'description': "New exam description"}
+        response = client.put('/api/exam/1/desc/', data=data)
+        self.assertEquals(200, response.status_code)
+        self.assertEquals("New exam description", response.json()['description'])
+
+    def test_post_exam(self):
+        client = APIClient()
+        data = {'title': "My second exam", 'description': "Distributed Computing2",
+                'date_start': "2021-01-04T01:36:00Z",
+                'date_finish': "2021-01-05T11:40:00Z", 'location': {'port': 998, 'host': "localhost",
+                                                                    'bind_key': "string1"},
+                'questions': [{'title': "First question?",
+                               'choices': [{'choice_id': 1,
+                                            'response': "First response"}],
+                               'correct_choice': 1}],
+                'students': [{'studentID': "423"}]}
+        response = client.post('/api/exam/', data=data, format='json')
+        response2 = client.get('/api/exam/')
+        response3 = client.get('/api/exam/2/')
+        json_resp2 = response2.json()
+        json_resp3 = response3.json()
+        self.assertEquals(201, response.status_code)
+        self.assertEquals(list, type(json_resp2))
+        self.assertEquals(2, len(json_resp2))
+        self.assertEquals("My second exam", json_resp3['title'])
+        self.assertEquals("First question?", json_resp3['questions'][0]['title'])
+        self.assertEquals([{'choice_id': 1, 'response': "First response"}], json_resp3['questions'][0]['choices'])
+        self.assertEquals(1, json_resp3['questions'][0]['correct_choice'])
+        self.assertEquals([{'studentID': "423"}], json_resp3['students'])
