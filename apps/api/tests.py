@@ -3,7 +3,7 @@ import json
 # Create your tests here.
 from rest_framework.test import APIClient
 
-from apps.exams.models import Question, Choice
+from apps.exams.models import Question, Choice, Exam, ExamLocation, Student
 
 
 class QuestionTestCase(TestCase):
@@ -34,4 +34,21 @@ class QuestionTestCase(TestCase):
         response = client.get(endpoint)
         self.assertEquals(200, response.status_code)
         return response
+
+
+class GradesTestCase(TestCase):
+
+    def setUp(self) -> None:
+        exam = Exam.objects.create(title="My first exam", description="My first exam description",
+                                   date_start="2021-01-04T01:36:00Z", date_finish="2021-01-04T01:36:00Z")
+        location = ExamLocation.objects.create(port=998, host="localhost", bind_key="string1")
+        question = Question.objects.create(title="First question?", correct_choice=1)
+        choice = Choice.objects.create(choice_id=1, response="First choice")
+        student = Student.objects.create(studentID=123)
+
+        question.choices.set([choice])
+        exam.location.set(location)
+        exam.questions.set([question])
+        exam.students.set([student])
+
 
