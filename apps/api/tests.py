@@ -44,12 +44,18 @@ class AllInOneTestCase(TestCase):
         self.assertEquals(200, response.status_code)
         return response
 
-    def test_get_grades(self):
+    def test_get_student_grades(self):
         client = APIClient()
         response = client.get('/api/exam/1/grades/123/')
         self.assertEquals(200, response.status_code)
         self.assertEquals('123', response.json()['student']['studentID'])
         self.assertEquals(0, response.json()['correct'])
+
+    def test_get_grades(self):
+        client = APIClient()
+        response = client.get('/api/exam/1/grades/')
+        json_resp = response.json()
+        self.assertEquals(list, type(json_resp))
 
     def test_put_grades(self):
         client = APIClient()
