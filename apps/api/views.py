@@ -47,9 +47,6 @@ class ExamDetail(mixins.RetrieveModelMixin,
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
 
-    def put(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
-
 
 class LocationList(mixins.ListModelMixin,
                    mixins.CreateModelMixin,
