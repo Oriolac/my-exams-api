@@ -85,10 +85,10 @@ class ExamGradesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Grade
-        fields = ['student', 'correct']
+        fields = ['student', 'correct', 'exam_id']
+
 
 class CorrectExamGradesSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Grade
         fields = ['correct']

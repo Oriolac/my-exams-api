@@ -322,3 +322,4 @@ dmypy.json
 !.vscode/extensions.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,vscode,visualstudiocode,pycharm,pycharm+all
+database/data**

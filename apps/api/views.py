@@ -125,3 +125,23 @@ class PutExamGrade(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, generics.
         grade.correct = request.data['correct']
         grade.save()
         return Response(ExamGradesSerializer(grade).data)
+
+
+class StudentListView(generics.ListAPIView):
+    queryset = Student.objects.all()
+    serializer_class = StudentSerializer
+
+
+class StudentDetailView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        student: Student = Student.objects.get(studentID=kwargs['studentID'])
+        return Response(StudentSerializer(student).data)
+
+
+class StudentGradesListView(APIView):
+
+    def get(self, request, *args, **kwargs):
+        student: Student = Student.objects.get(studentID=kwargs['studentID'])
+        grades = Grade.objects.filter(student=student)
+        return Response(ExamGradesSerializer(grades, many=True).data)
