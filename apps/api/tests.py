@@ -91,8 +91,6 @@ class AllInOneTestCase(TestCase):
         self.assertEquals('localhost', location['host'])
         self.assertEquals('string1', location['bind_key'])
 
-
-
     def test_delete_exam(self):
         factory = APIClient()
         response = factory.delete('/api/exam/1/')
