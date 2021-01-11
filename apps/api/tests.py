@@ -13,7 +13,7 @@ class AllInOneTestCase(TestCase):
         super(AllInOneTestCase, cls).setUpClass()
         location = ExamLocation.objects.create(port=998, host="localhost", bind_key="string1")
         exam = Exam.objects.create(title="My first exam", description="My first exam description",
-                                   date_start="2021-01-04T01:36:00Z", date_finish="2021-01-04T01:36:00Z",
+                                   date_start="2020-01-04T01:36:00Z", date_finish="2021-01-04T01:36:00Z",
                                    location=location)
         question = Question.objects.create(title="First question?", correct_choice=1)
         choice = Choice.objects.create(choice_id=1, response="First choice")

@@ -37,13 +37,6 @@ class Question(models.Model):
         return f"{self.title}\n{choices_str}"
 
 
-"""    def save(self, **kwargs):
-        if self.choices.get(choice_id=self.correct_choice) is not None:
-            super(Question, self).save(**kwargs)
-        else:
-            raise ValidationError("Correct choice not in Choices")"""
-
-
 class Exam(models.Model):
     title = models.CharField(max_length=25)
     description = models.TextField(max_length=250)
@@ -56,11 +49,11 @@ class Exam(models.Model):
     def __str__(self):
         return f"{self.id} - {self.title}"
 
-"""    def save(self, **kwargs):
-        if self.date_start < self.date_finish:
+    def save(self, **kwargs):
+        if self.date_start <= self.date_finish:
             super(Exam, self).save(**kwargs)
         else:
-            raise ValidationError("Correct choice not in Choices")"""
+            raise ValidationError(f"{self.date_start} > {self.date_finish}")
 
 
 class Grade(models.Model):
