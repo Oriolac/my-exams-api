@@ -1,15 +1,19 @@
 # My Exams API
-
+Exams management API built with Django and Django Rest Framework.
 ## How to use
 ### Running
-The first time, you must run the images.
+The first time, you must build the images using.
 ```bash
 docker-compose build
 ```
+In order to run the container, you must:
 ```bash
 docker-compose up
 ```
-
+You can run the container in detach mode:
+```bash
+docker-compose up -d
+```
 ### DB Migration
 ```bash
 docker-compose exec web python manage.py migrate
@@ -18,7 +22,7 @@ docker-compose exec web python manage.py createsuperuser
 
 ### Testing
 ```bash
-docker-compose exec web python manage.py test apps.api.tests
+docker-compose exec web python manage.py test apps.api.tests.AllInOneTestCas
 ```
 
 ## Specifications
@@ -39,6 +43,6 @@ docker-compose exec web python manage.py test apps.api.tests
 - [X] Use a Data source in order to manage data information.
 
 ### Integration Functions
-- [] Create and exam on the WS after uploading the csv file to your RMI server.
-- [] Students should validate its ID bfore starting an exam. It receives, in exchange, server's connection details.
-- [] Store grades on the WS.
+- [X] Create and exam on the WS after uploading the csv file to your RMI server.
+- [X] Students should validate its ID bfore starting an exam. It receives, in exchange, server's connection details.
+- [X] Store grades on the WS.
